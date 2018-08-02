@@ -5,6 +5,6 @@ phases:
   variables:
     printName: Chris
   steps:
-  - script: echo Hello %showName%
+  - script: echo Hello %showName% and %alternateName%
     env:
       showName: $(printName)
