@@ -9,7 +9,7 @@ steps:
     azureSubscription: 'HelixProd_KeyVault'
     KeyVaultName: HelixProdKV
     SecretsFilter: 'HelixApiAccessToken'
-  condition: always()
+  condition: ${{ and(always(), not(startsWith(parameters.helixSource, 'pr/'))) }
 - bash: |
     # create a temporary file
     jobInfo=`mktemp`
