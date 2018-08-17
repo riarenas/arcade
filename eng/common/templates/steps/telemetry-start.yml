@@ -4,12 +4,13 @@ parameters:
   buildConfig: ''
 
 steps:
-- task: AzureKeyVault@1
-  inputs:
-    azureSubscription: 'HelixProd_KeyVault'
-    KeyVaultName: HelixProdKV
-    SecretsFilter: 'HelixApiAccessToken'
-  condition: ${{ and(always(), not(startsWith(parameters.helixSource, 'pr/'))) }
+- ${{ if not(startsWith(parameters.helixSource, 'pr/')) }}
+  - task: AzureKeyVault@1
+    inputs:
+      azureSubscription: 'HelixProd_KeyVault'
+      KeyVaultName: HelixProdKV
+      SecretsFilter: 'HelixApiAccessToken'
+    condition: always()
 - bash: |
     # create a temporary file
     jobInfo=`mktemp`
