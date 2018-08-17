@@ -4,7 +4,7 @@ parameters:
   buildConfig: ''
 
 steps:
-- ${{ if not(startsWith(parameters.helixSource, 'pr/')) }}
+- ${{ if not(startsWith(parameters.helixSource, 'pr/')) }}:
   - task: AzureKeyVault@1
     inputs:
       azureSubscription: 'HelixProd_KeyVault'
