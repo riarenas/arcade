@@ -57,7 +57,7 @@ steps:
     if [ $curlStatus -ne 0 ]; then
       echo "Failed To Send Job Start information"
       # We have to append the ## vso prefix or vso will pick up the command when it dumps the inline script into the shell
-      vstsLogOutput="vso[task.logissue type=error;sourcepath=telemetry/start-job.sh;code=1;]Failed to Send Job Start information: $curlStatus"
+      vstsLogOutput="vso[task.logissue type=error;sourcepath=templates/steps/telemetry-start.yml;code=1;]Failed to Send Job Start information: $curlStatus"
       echo "##$vstsLogOutput"
       exit 1
     fi
@@ -98,7 +98,7 @@ steps:
     # validate status of curl command
     if [ $curlStatus -ne 0 ]; then
       echo "Failed to Send Build Start information"
-      vstsLogOutput="vso[task.logissue type=error;sourcepath=telemetry/build/start.sh;code=1;]Failed to Send Build Start information: $curlStatus"
+      vstsLogOutput="vso[task.logissue type=error;sourcepath=templates/steps/telemetry-start.yml;code=1;]Failed to Send Build Start information: $curlStatus"
       echo "##$vstsLogOutput"
       exit 1
     fi
