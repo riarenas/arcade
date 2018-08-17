@@ -20,14 +20,14 @@ phases:
       ${{ insert }}: ${{ parameters.variables }}
       _HelixType: build/product
       _HelixBuildConfig: $(_BuildConfig)
-      ${{ if notIn(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'PullRequest') }}:
+      ${{ if notIn(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'PullRequest', 'Manual') }}:
         _PublishBlobFeedUrl: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
         _TeamName: DotNetCore
         _PublishArgs: /p:PB_PublishBlobFeedKey=$(dotnetfeed-storage-access-key-1) 
           /p:PB_PublishBlobFeedUrl=$(_PublishBlobFeedUrl) 
           /p:PB_PublishType=$(_PublishType) 
         _HelixSource: official/dotnet/arcade/$(Build.SourceBranch)
-      ${{ if in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'PullRequest') }}:
+      ${{ if in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI', 'PullRequest', 'Manual') }}:
         _PublishArgs: ''
         _HelixSource: pr/dotnet/arcade/$(Build.SourceBranch)
 
@@ -35,7 +35,7 @@ phases:
     # Internal only build steps
     - template: /eng/common/templates/steps/build-reason.yml
       parameters:
-        conditions: not IndividualCI,BatchedCI,PullRequest
+        conditions: not IndividualCI,BatchedCI,PullRequest,Manual
         steps:
         - task: ms-vseng.MicroBuildTasks.30666190-6959-11e5-9f96-f56098202fef.MicroBuildSigningPlugin@1
           displayName: Install MicroBuild plugin
@@ -80,7 +80,7 @@ phases:
     # Internal only build steps (until publishing artifacts in public CI is supported)
     - template: /eng/common/templates/steps/build-reason.yml
       parameters:
-        conditions: not IndividualCI,BatchedCI,PullRequest
+        conditions: not IndividualCI,BatchedCI,PullRequest,Manual
         steps:
         - task: CopyFiles@2
           displayName: Gather Logs

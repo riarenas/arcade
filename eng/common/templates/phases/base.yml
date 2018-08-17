@@ -27,7 +27,7 @@ parameters:
   enableTelemetry: false
 
   # Build.Reason for anonymous builds - https://docs.microsoft.com/en-us/vsts/pipelines/build/variables?view=vsts#build-variables
-  publicBuildReasons: IndividualCI,BatchedCI,PullRequest
+  publicBuildReasons: IndividualCI,BatchedCI,PullRequest,Manual
 
 phases:
 - phase: ${{ parameters.name }}
@@ -44,21 +44,17 @@ phases:
       fetchDepth: ${{ parameters.fetchDepth }}
 
   - ${{ if eq(parameters.enableTelemetry, 'true') }}:
-    # Remove this condition once telemetry can be sent from public CI
-    - ${{ if not(contains(parameters.publicBuildReasons, variables['Build.Reason'] )) }}:
-      - template: /eng/common/templates/steps/telemetry-start.yml
-        parameters:
-          buildConfig: ${{ parameters.variables._HelixBuildConfig }}
-          helixSource: ${{ parameters.variables._HelixSource }}
-          helixType: ${{ parameters.variables._HelixType }}
+    - template: /eng/common/templates/steps/telemetry-start.yml
+      parameters:
+        buildConfig: ${{ parameters.variables._HelixBuildConfig }}
+        helixSource: ${{ parameters.variables._HelixSource }}
+        helixType: ${{ parameters.variables._HelixType }}
 
   # Run provided build steps
   - ${{ parameters.steps }}
 
   - ${{ if eq(parameters.enableTelemetry, 'true') }}:
-    # Remove this condition once telemetry can be sent from public CI
-    - ${{ if not(contains(parameters.publicBuildReasons, variables['Build.Reason'] )) }}:
-      - template: /eng/common/templates/steps/telemetry-end.yml
-        parameters:
-          helixSource: ${{ parameters.variables._HelixSource }}
-          helixType: ${{ parameters.variables._HelixType }}
+    - template: /eng/common/templates/steps/telemetry-end.yml
+      parameters:
+        helixSource: ${{ parameters.variables._HelixSource }}
+        helixType: ${{ parameters.variables._HelixType }}
