@@ -39,6 +39,18 @@
     <AzurePipelinesExpectedTestFailure Include="tests.UnitTest2.ExpectedFailureTheoryTest"/>
   </ItemGroup>
 
+    <ItemGroup>
+    <!-- Includes the 6.0.0-preview.4.21178.6 dotnet runtime package version from the Current channel, using the DotNetCliRuntime -->
+    <AdditionalDotNetPackage Include="6.0.0-preview.4.21178.6">
+      <!-- 'sdk', 'runtime' or 'aspnetcore-runtime' -->
+      <PackageType>runtime</PackageType>
+      <!-- 'Current' or 'LTS', determines what channel 'latest' version pulls from -->
+      <Channel>Current</Channel>
+    </AdditionalDotNetPackage>
+    <!-- Includes the 6.0.0-preview.4.21175.1 version, using the default runtime packageType, DotNetCliRuntime, and Current channel  -->
+    <AdditionalDotNetPackage Include="6.0.0-preview.4.21175.1" />
+  </ItemGroup>
+
   <ItemGroup>
     <XUnitProject Include="..\src\**\*.Tests.csproj"/>
 
